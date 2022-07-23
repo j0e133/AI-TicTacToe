@@ -80,20 +80,4 @@ def draw(game: TicTacToe, trainer: Trainer):
     rect = text.get_rect(topleft=(5, 65))
     SCREEN.blit(text, rect)
 
-    text = FONT_TINY.render(f'Best bads: {round(trainer.stats[4], 3)}', True, BLACK)
-    rect = text.get_rect(topleft=(5, 105))
-    SCREEN.blit(text, rect)
-
-    text = FONT_TINY.render(f'Avg bads: {round(trainer.stats[5], 3)}', True, BLACK)
-    rect = text.get_rect(topleft=(5, 125))
-    SCREEN.blit(text, rect)
-
-    text = FONT_TINY.render(f'Top 50% avg bads: {round(trainer.stats[6], 3)}', True, BLACK)
-    rect = text.get_rect(topleft=(5, 145))
-    SCREEN.blit(text, rect)
-
-    text = FONT_TINY.render(f'top 10% avg bads: {round(trainer.stats[7], 3)}', True, BLACK)
-    rect = text.get_rect(topleft=(5, 165))
-    SCREEN.blit(text, rect)
-
     pygame.display.flip()

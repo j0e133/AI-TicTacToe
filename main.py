@@ -1,8 +1,7 @@
 import pygame, sys
 pygame.init()
 from TicTacToe import TicTacToe
-from training import Trainer, AIopponent
-from neuralNetwork import neuralNetwork
+from training import Trainer
 from draw import draw, BOARD
 from opponents import *
 
@@ -29,10 +28,10 @@ COL_TO_TILE = {
 
 
 
-def EPICMOVE(game: TicTacToe) -> None:
-    op = EPIC()
-    op.setLetter(game.turn)
-    op.move(game)
+OP = Perfect
+def perfectMove(game: TicTacToe) -> None:
+    OP.setLetter(game.turn)
+    OP.move(game)
 
 
 
@@ -96,8 +95,6 @@ def playInput():
 
 
 game = TicTacToe()
-# stop = True
-# inputFunc = playInput
 stop = False
 inputFunc = normInput
 

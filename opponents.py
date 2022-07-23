@@ -1,13 +1,13 @@
-from random import shuffle, choice, choices
+from random import shuffle, choice
 from TicTacToe import TicTacToe
 
 
 
-ALL_MOVES = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 CORNERS =   [0, 2, 6, 8]
 CORNERS_SET = set(CORNERS)
 MIDDLES =   [1, 3, 5, 7]
 CENTER =    [4]
+
 
 WINS = (
     (0, 1, 2),
@@ -20,51 +20,26 @@ WINS = (
     (2, 4, 6)
 )
 
-ROWS = (
-    (0, 1, 2),
-    (3, 4, 5),
-    (6, 7, 8),
-)
-
-COLS = (
-    (0, 3, 6),
-    (1, 4, 7),
-    (2, 5, 8),
-)
-
-DIAG = {
-    (0, 4, 8),
-    (2, 4, 6)
-}
-
 SWAP = {
     'X': 'O',
     'O': 'X'
 }
 
 
-class opponent:
+
+class Perfect:
     def __init__(self):
         self.letter = 'X'
         self.opponent = 'O'
         self.score = 0
         self.badCount = 0
+    
+    def __repr__(self) -> str:
+        return f'Perfect opponent'
 
     def setLetter(self, letter: str) -> None:
         self.letter = letter
         self.opponent = SWAP[letter]
-
-    def move(self, game: TicTacToe) -> None:
-        return
-
-
-
-class EPIC(opponent):
-    def __init__(self):
-        super().__init__()
-    
-    def __repr__(self) -> str:
-        return f'EPIC opponent'
 
     def move(self, game: TicTacToe) -> None:
         moves = []

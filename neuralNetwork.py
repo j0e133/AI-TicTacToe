@@ -4,6 +4,7 @@ from random import random, randint
 
 
 
+LAYERS = [10,   11,   12,   11,   10,   9]
 MUTATION_RATE = 1 / 100
 
 
@@ -44,15 +45,15 @@ class synapse:
 
 
 class neuralNetwork:
-    def __init__(self, layers: list[int], neuronWeights: list[list[float]] = None, synapseWeights: list[list[float]] = None):
-        self.layers = len(layers)
+    def __init__(self, neuronWeights: list[list[float]] = None, synapseWeights: list[list[float]] = None):
+        self.layers = len(LAYERS)
         self.afuncs = [RELU] * (self.layers - 1) + [sigmoid]
 
         self.neuronLayers: list[list[neuron]] = []
         self.synapseLayers: list[list[synapse]] = []
         
         if neuronWeights and synapseWeights:
-            for i, neurons in enumerate(layers):
+            for i, neurons in enumerate(LAYERS):
                 self.neuronLayers.append([neuron(self.afuncs[i], neuronWeights[i][j]) for j in range(neurons)])
 
             for i in range(self.layers - 1):
@@ -62,7 +63,7 @@ class neuralNetwork:
                     self.synapseLayers[i][j].weight = synapseWeights[i][j]
 
         else:
-            for i, neurons in enumerate(layers):
+            for i, neurons in enumerate(LAYERS):
                 self.neuronLayers.append([neuron(self.afuncs[i]) for _ in range(neurons)])
 
             for i in range(self.layers - 1):

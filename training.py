@@ -1,13 +1,11 @@
-import pygame
 from random import shuffle, random, choice
 from neuralNetwork import neuralNetwork, RELU, sigmoid
 from TicTacToe import TicTacToe
-from opponents import EPIC, opponent
+from opponents import Perfect
 
 
 
-layers = [10,   11,   12,   11,   10,   9]
-aFuncs = [RELU, RELU, RELU, RELU, RELU, sigmoid]
+AFUNCS = [RELU, RELU, RELU, RELU, RELU, sigmoid]
 
 INPUT_MAP = {
     'X': {
@@ -66,14 +64,10 @@ class sort:
 
 class AIopponent:
     def __init__(self):
-        self.brain = neuralNetwork(layers)
+        self.brain = neuralNetwork()
         self.letter = 'X'
         self.score = 0
         self.badCount = 0
-
-    def __repr__(self) -> str:
-        return f'AI opponent | Score {self.score}'
-        # return f'AI opponent | Letter {self.letter}'
 
     def move(self, game: TicTacToe) -> None:
         ins = boardToInputs(game.board, self.letter) + [random()]
@@ -99,13 +93,10 @@ class AIopponent:
 class population:
     def __init__(self):
         good = AIopponent()
-        good.brain = neuralNetwork.load('saves/gen1111.json')
+        good.brain = neuralNetwork.load('saves/2347.json')
         self.toPlay = [AIopponent() for _ in range(AI_COUNT - 1)] + [good]
         self.played: list[AIopponent] = []
         self.all = self.toPlay.copy()
-
-    def __repr__(self) -> str:
-        return f'Population | {len(self.toPlay)} left to play | {len(self.played)} already played'
 
     def getOpponent(self) -> AIopponent:
         if len(self.toPlay):
@@ -113,7 +104,7 @@ class population:
             self.played.append(opponent)
             return opponent
 
-    def newGeneration(self) -> float | AIopponent:
+    def newGeneration(self) -> list[float | int] | AIopponent:
         sortedAI = sorted(self.played, key=lambda member: member.score - member.badCount * 0.25)
 
         bestAI = sortedAI[-1]
@@ -122,11 +113,6 @@ class population:
         avgScore = sum(AI.score for AI in self.played) / AI_COUNT
         t50AvgScore = sum(AI.score for AI in sortedAI[-AI_50:]) / AI_50
         t10AvgScore = sum(AI.score for AI in sortedAI[-AI_10:]) / AI_10
-
-        bestBads = min(AI.badCount for AI in self.played)
-        avgBads = sum(AI.badCount for AI in self.played) / AI_COUNT
-        t50Bads = sum(AI.badCount for AI in sortedAI[-AI_50:]) / AI_50
-        t10Bads = sum(AI.badCount for AI in sortedAI[-AI_10:]) / AI_10
 
         best = sortedAI[-AI_KEPT:]
         for ai in best:
@@ -139,7 +125,7 @@ class population:
         self.played = []
         self.all = self.toPlay.copy()
 
-        return [avgScore, bestScore, t50AvgScore, t10AvgScore, bestBads, avgBads, t50Bads, t10Bads], bestAI
+        return [avgScore, bestScore, t50AvgScore, t10AvgScore], bestAI
 
 
 
@@ -150,7 +136,7 @@ class Trainer:
         self.generation = 1
         self.stats = [0, 0, 0, 0, 0, 0, 0, 0]
         self.prevBest: AIopponent = AIopponent()
-        self.opponent: opponent = EPIC()
+        self.opponent: Perfect = Perfect()
         self.gamesPlayed = 0
 
     def __repr__(self) -> str:
@@ -181,7 +167,7 @@ class Trainer:
                 self.opponent.letter = SWAP_LETTER[self.opponent.letter]
                 self.game.reset()
 
-    def newGame(self):
+    def newGame(self) -> None:
         if len(self.population.toPlay) == 0:
             self.stats, self.prevBest = self.population.newGeneration()
             self.generation += 1
